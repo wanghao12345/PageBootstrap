@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分页</title>
+    <link rel="stylesheet" type="text/css" href="../lib/bootstrap-3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        #page{
+            margin-top: 100px;
+            margin-left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="page"></div>
+</body>
+<script type="text/javascript" src="../src/pageBoostrap.js"></script>
+<script>
+    new Page({
+        'targetDom': document.getElementById('page'),
+        'totalSize': '112'
+    })
+    
+
+</script>
+</html>
