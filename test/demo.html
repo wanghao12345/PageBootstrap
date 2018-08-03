@@ -12,13 +12,27 @@
     </style>
 </head>
 <body>
+    <div>
+        <table id="data">
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+            </tr>
+           
+        </table>
+    </div>
     <div id="page"></div>
 </body>
 <script type="text/javascript" src="../src/pageBoostrap.js"></script>
 <script>
-    new Page({
+    var page = new Page({
         'targetDom': document.getElementById('page'),
-        'totalSize': '112'
+        'totalSize': '112',
+        'url': '../mock/demo.json?pageNum=2',
+        callback: function(data){
+            var item = data.data.data;
+            console.log(data);
+        }
     })
     
 
