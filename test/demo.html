@@ -9,32 +9,51 @@
             margin-top: 100px;
             margin-left: 100px;
         }
+        table{
+            border-collapse: collapse;
+        }
+        table tr th,td{
+            border: 1px solid #333;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <table id="data">
-            <tr>
-                <th>ID</th>
-                <th>名字</th>
-            </tr>
-           
-        </table>
+    <div id="table">
+
     </div>
     <div id="page"></div>
 </body>
+<script type="text/javascript" src="../lib/art-template/template.js"></script>
 <script type="text/javascript" src="../src/pageBoostrap.js"></script>
+<script type="text/html" id="template">
+    <table id="data">
+        <tr>
+            <th>ID</th>
+            <th>名字</th>
+        </tr>
+       <% for( var i = 0; i < item.length; i++) { %>
+            <tr>
+                <td><%=item[i].id%></td>
+                <td><%=item[i].dataTypeName%></td>
+            </tr>
+       <% } %>
+    </table>    
+</script>
 <script>
+    var data;
     var page = new Page({
         'targetDom': document.getElementById('page'),
         'totalSize': '112',
-        'url': '../mock/demo.json?pageNum=2',
+        'url': '../mock/demo.json',
         callback: function(data){
             var item = data.data.data;
+            data = {
+                'item': item
+            }
+            var html = template('template', data);
+            document.getElementById('table').innerHTML = html;
             console.log(data);
         }
     })
-    
-
 </script>
 </html>

@@ -20,6 +20,8 @@ var Page = function (obj) {
     this.nextPage = obj.nextPage || '下一页';
     //尾页
     this.lastPage = obj.lastPage || '尾页';
+    //跳转
+    this.jumpPage = obj.jumpPage || '跳转';
     //总条数
     this.totalSize = null;
     //总页数
@@ -57,7 +59,8 @@ Page.prototype.ajaxRequest = function (url) {
  * 初始化分页，完成分页DOM结构显示
  */
 Page.prototype.initDOM = function () {
-    var str = '<ul class="pagination">';
+    var str = '<div style="overflow: hidden;">'
+    str += '<ul class="pagination" style="float: left;">';
     str += '<li class="page-item"><a class="page-link" href="javascript:;">'+this.prevPage+'</a></li>';
     str += '<li class="page-item"><a class="page-link" href="javascript:;">'+this.firstPage+'</a></li>';
     for (var i = 0; i < this.totalPage; i++) {
@@ -70,6 +73,9 @@ Page.prototype.initDOM = function () {
     str += '<li class="page-item"><a class="page-link" href="javascript:;">'+this.lastPage+'</a></li>';  
     str += '<li class="page-item"><a class="page-link" href="javascript:;">'+this.nextPage+'</a></li>';
     str += '</ul>'
+    str += '<input type="text" class="form-control jump-page-number" class="form-control" style="float: left;margin: 21px 10px;width: 50px;height: 32px;" />';
+    str += '<a class="btn btn-primary page-link" href="javascript:;" role="button" style="margin: 21px 0;height: 32px;">'+this.jumpPage+'</a>';
+    str +='</div>'
     this.targetDom.innerHTML = str;
     this.bindEvent();
 }
@@ -89,7 +95,7 @@ Page.prototype.bindEvent = function () {
  * 选择页码
  */
 Page.prototype.selectPage = function (page) {
-    this.targetDom.getElementsByClassName('page-item' + this.currentPage)[0].classList.remove('active')
+    var _currentPage = this.currentPage;
     switch (page) {
         case this.firstPage:
             this.currentPage = 1;
@@ -103,10 +109,29 @@ Page.prototype.selectPage = function (page) {
         case this.nextPage:
             this.currentPage == this.totalPage ? this.currentPage : this.currentPage++;
             break;
+        case this.jumpPage:
+            var number = parseInt(this.targetDom.getElementsByClassName('jump-page-number')[0].value);
+            if (number >= 1 && number <= this.totalPage) {
+                this.currentPage = number;
+            } else {
+                alert( number.toString() ==='NaN' ? '页码格式不对！' : '超出页码范围！');
+                this.targetDom.getElementsByClassName('jump-page-number')[0].value = '';
+                return;
+            }
+            break;
         default:
             this.currentPage =  parseInt(page);
             break;
     }
-    this.ajaxRequest(this.url);
+    // this.ajaxRequest(this.url);
+
+    if (this.currentPage % 2 == 0) {
+        this.ajaxRequest('../mock/demo1.json');
+    } else {
+        this.ajaxRequest('../mock/demo.json');
+    }
+
+
+    this.targetDom.getElementsByClassName('page-item' + _currentPage)[0].classList.remove('active');
     this.targetDom.getElementsByClassName('page-item' + this.currentPage)[0].classList.add('active')
 }
